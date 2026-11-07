@@ -18,6 +18,7 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -30,7 +31,12 @@ body {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
+}
+
+a, button {
+  -webkit-tap-highlight-color: transparent;
 }
 
 a {
@@ -76,6 +82,7 @@ h2 {
   transition: all .3s ease;
   cursor: pointer;
   border: 1px solid var(--gold);
+  min-height: 44px;
 }
 
 .btn-gold {
@@ -104,7 +111,7 @@ h2 {
 }
 
 /* ==========================================
-   HEADER / NAVEGAÇÃO
+   HEADER / NAVEGAÇÃO & MENU HAMBÚRGUER
    ========================================== */
 header {
   position: fixed;
@@ -113,6 +120,7 @@ header {
   background: rgba(251, 248, 243, .88);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(176, 141, 87, .18);
+  padding-top: env(safe-area-inset-top);
 }
 
 .nav {
@@ -163,9 +171,45 @@ nav a:hover {
   color: var(--gold-dark);
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
 .nav .btn {
   padding: .75rem 1.4rem;
   font-size: .78rem;
+}
+
+.menu-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(176, 141, 87, .4);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.menu-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.menu-toggle .icon-close {
+  display: none;
+}
+
+.menu-open .menu-toggle .icon-open {
+  display: none;
+}
+
+.menu-open .menu-toggle .icon-close {
+  display: block;
 }
 
 /* ==========================================
@@ -173,7 +217,7 @@ nav a:hover {
    ========================================== */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   padding-top: 80px;
@@ -222,6 +266,7 @@ nav a:hover {
   margin-top: 3.5rem;
   padding-top: 2rem;
   border-top: 1px solid rgba(176, 141, 87, .3);
+  flex-wrap: wrap;
 }
 
 .hero-stats strong {
@@ -624,8 +669,8 @@ footer address {
 
 .wa-float {
   position: fixed;
-  right: 1.5rem;
-  bottom: 1.5rem;
+  right: calc(1.5rem + env(safe-area-inset-right));
+  bottom: calc(1.5rem + env(safe-area-inset-bottom));
   z-index: 60;
   width: 58px;
   height: 58px;
@@ -650,6 +695,12 @@ footer address {
 /* ==========================================
    RESPONSIVIDADE (DISPOSITIVOS MÓVEIS E TABLETS)
    ========================================== */
+@media (hover: none) {
+  .card:hover, .wa-float:hover {
+    transform: none;
+  }
+}
+
 @media (max-width: 1024px) {
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
@@ -657,11 +708,38 @@ footer address {
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .about-grid {
+    gap: 3rem;
+  }
 }
 
 @media (max-width: 820px) {
+  .menu-toggle {
+    display: grid;
+  }
+  nav {
+    position: fixed;
+    inset: calc(80px + env(safe-area-inset-top)) 0 auto 0;
+    background: var(--bg);
+    border-bottom: 1px solid rgba(176, 141, 87, .25);
+    box-shadow: 0 20px 40px -20px rgba(46, 42, 37, .25);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+  }
+  .menu-open nav {
+    max-height: 420px;
+  }
   nav ul {
-    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: .5rem 1.5rem 1.5rem;
+  }
+  nav li a {
+    display: block;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(176, 141, 87, .15);
+    font-size: .9rem;
   }
   .about-grid, .grid-3 {
     grid-template-columns: 1fr;
@@ -695,5 +773,33 @@ footer address {
   }
   section {
     padding-block: 5rem;
+  }
+  .about-photo::before {
+    top: -.75rem;
+    left: -.75rem;
+    right: .75rem;
+    bottom: .75rem;
+  }
+  .hero-actions .btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav .btn-gold {
+    display: none;
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+  }
+  .card {
+    padding: 2rem 1.4rem;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
   }
 }
